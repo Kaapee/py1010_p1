@@ -16,6 +16,7 @@ Created on Sun Mar 30 15:05:45 2025
 # Laster inn pakken pandas som behandler data, og kan behandle excel-filer
 import pandas as pd
 import matplotlib.pyplot as plt
+import re
 
 # Laster inn excelfil og kaller den support
 support = pd.read_excel("support_uke_24.xlsx")
@@ -100,24 +101,50 @@ print("Snitt for samtaletid denne uken er: ", samtaletid_snitt, "\n")
 #     Skriv et program som finner det totale antall henvendelser supportavdelingen mottok for hver av tidsrommene 08-10, 10-12, 12-14 og 14-16 for uke 24. 
 #     Resultatet visualiseres ved bruk av et sektordiagram (kakediagram).
 
-# Starter med å sortere samtalene med en 
-# https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.between_time.html
 
-# support['Klokkeslett'].between_time(start_time, end_time, inclusive='both', axis=None)
+# https://docs.python.org/3/library/re.html#regular-expression-examples
+# https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.Series.str.match.html
 
-
-
-support['Klokkeslett'].between_time(08:00, 10:00)
-
-
+# Her går en for løkke gjennom tekstverdien til kl_slett og øker verdien med 1 for hver treff på tekst som starter på:
+# r : raw string, unngår potensielle problemer med søket, "0[89]:" her søker vi mellom tekst-verdiene 0 og enten 8 eller 9 etterfulgt av :
+# for eksempel klokkeslett som starter på "08:" og "09:"
+ 
 
 
+kl_08_10 = 0
+
+for i in kl_slett:
+    if re.match(r"0[89]:", i):
+        kl_08_10 +=1
+        
+print("Antall telefoner mellom 08-10: ", kl_08_10)
+
+kl_10_12 = 0
+
+for i in kl_slett:
+    if re.match(r"1[01]:", i):
+        kl_10_12 +=1
+        
+print("Antall telefoner mellom 10-12: ", kl_10_12)
 
 
+kl_12_14 = 0
+
+for i in kl_slett:
+    if re.match(r"1[23]:", i):
+        kl_12_14 +=1
+        
+print("Antall telefoner mellom 12-14: ", kl_12_14)
 
 
+kl_14_16 = 0
 
+for i in kl_slett:
+    if re.match(r"1[45]:", i):
+        kl_14_16 +=1
+        
+print("Antall telefoner mellom 14-16: ", kl_14_16)
 
-
-
+totalt_antall_samtaler = (kl_08_10 + kl_10_12 + kl_12_14 + kl_14_16)
+print ("Totalt antall samtaler denne uken er :", totalt_antall_samtaler)
 
