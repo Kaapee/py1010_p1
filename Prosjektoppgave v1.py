@@ -6,18 +6,12 @@ Created on Sun Mar 30 15:05:45 2025
 """
 
 
-# Del a) Skriv et program som leser inn filen ‘support_uke_24.xlsx’ og lagrer data fra 
-# kolonne 1 i en array med variablenavn ‘u_dag’, dataen i 
-# kolonne 2 lagres i arrayen ‘kl_slett’, data i 
-# kolonne 3 lagres i arrayen ‘varighet’ og dataen i 
-# kolonne 4 lagres i arrayen ‘score’. 
-# Merk: filen ‘support_uke_24.xlsx’ må ligge i samme mappe som Python-programmet ditt.
-
 # Laster inn pakken pandas som behandler data, og kan behandle excel-filer
 import pandas as pd
 import matplotlib.pyplot as plt
 import re
 
+# DEL A
 # Laster inn excelfil og kaller den support
 support = pd.read_excel("support_uke_24.xlsx")
 
@@ -33,14 +27,16 @@ varighet = support['Varighet'].values
 # # Lagrer dataen i kolonnen Tilfredshet i excelarket til arrayen score
 score = support['Tilfredshet'].values
 
-# En test for å sjekke at vi laster inn filen og skriver ut fornuftige verdier
+
 # Gir kolonnene i excelarket navn data = support[["Ukedag", "Klokkeslett", "Varighet", "Tilfredshet"]]
 # data = support[["Ukedag", "Klokkeslett", "Varighet", "Tilfredshet"]]
+
+# En test for å sjekke at vi laster inn filen og skriver ut fornuftige verdier
 # data.to_excel("Sammensatt.xlsx")
 
 ##################################################################################################################
-# Del b) Skriv et program som finner antall henvendelser for hver de 5 ukedagene. 
-# Resultatet visualiseres ved bruk av et søylediagram (stolpediagram).
+
+# DEL B
 
 # Laster inn ukedager og teller opp antall henvendelser for hver ukedag
 ukedager = support["Ukedag"].value_counts()
@@ -64,8 +60,7 @@ ukedager_sortert.plot(kind="bar", title="Henvendelser per ukedag")
 
 ##################################################################################################################
 
-# Del c) Skriv et program som finner minste og lengste samtaletid som er loggført for uke 24. 
-# Svaret skrives til skjerm med informativ tekst.
+# DEL C
 
 # Fant flere enkle funksjoner for pandas her: https://pandas.pydata.org/docs/user_guide/basics.html
 
@@ -78,7 +73,8 @@ print("Den lengste samtalen denne uken varte i: ",samtale_lengste, "\n")
 
 ##################################################################################################################
 
-#      Del d) KREVENDE: Skriv et program som regner ut gjennomsnittlig samtaletid basert på alle henvendelser i uke 24.
+
+# DEL D
 
 # Her fungerer det ikkje å bruke varighet.mean() fordi samtaletiden er lagret som string med formatet hh:mm:ss
 # Vi kan formatere om dette formatet ved å bruke to.timedelta funksjonen i pandas
@@ -97,9 +93,7 @@ print("Snitt for samtaletid denne uken er: ", samtaletid_snitt, "\n")
 
 ##################################################################################################################
 
-#     Del e) Supportvaktene i MORSE er delt inn i 2-timers bolker: kl 08-10, kl 10-12, kl 12-14 og kl 14-16. 
-#     Skriv et program som finner det totale antall henvendelser supportavdelingen mottok for hver av tidsrommene 08-10, 10-12, 12-14 og 14-16 for uke 24. 
-#     Resultatet visualiseres ved bruk av et sektordiagram (kakediagram).
+# DEL E
 
 
 # https://docs.python.org/3/library/re.html#regular-expression-examples
@@ -162,15 +156,8 @@ ax.pie(sizes, labels=labels, autopct='%1.0f%%')
 
 ##################################################################################################################
 
-# Del f) Kundens tilfredshet loggføres som tall fra 1-10 hvor 1 indikerer svært misfornøyd og 10 indikerer svært fornøyd. Disse tilbakemeldingene skal så overføres til NPS-systemet (Net Promoter Score).
-# NPS-systemet er konstruert på følgende måte:
-# # Score 1-6 oppfattes som at kunden er negativ (vil trolig ikke anbefale MORSE til andre).
-# Score 7-8 oppfattes som et nøytralt svar.
-# Score 9-10 oppfattes som at kunden er positiv (vil trolig anbefale MORSE til andre).
-# Supportavdelingens NPS beregnes som et tall, prosentandelen positive kunder minus prosentandelen negative kunder. Ved en formel kan dette gis slik:
-# NPS = % positive kunder - % negative kunder
+# DEL F
 
-# Lag et program som regner ut supportavdelings NPS og skriver svaret til skjerm. Merk: Kunder som ikke har gitt tilbakemelding på tilfredshet, skal utelates fra utregningene.
 
 # Finner først antallet tilbakemeldinger som er registrert ved å bruke en for-løkke for hele tabellen score, der vi teller opp antallet treff med verdi fra og med 1
 
@@ -181,6 +168,9 @@ for i in score:
 
 # print (antall_tilbakemeldinger)
 
+
+# Finner antallet negative tilbakemeldinger
+
 negative_kunder = 0
 for i in score:
     if 0 <= i <=6:
@@ -189,6 +179,8 @@ for i in score:
 # print (negative_kunder)
 
 
+# Finner antallet positive tilbakemeldinger
+
 positive_kunder = 0
 for i in score:
     if 9 <= i:
@@ -196,9 +188,12 @@ for i in score:
 
 # print (positive_kunder)
 
+# Regner ut prosentmessig negative kunder
+
 prosent_negative = (negative_kunder / antall_tilbakemeldinger) *100
 # print(f"Andel negative kunder er: {prosent_negative:.1f} %")
 
+# Beregner NPS-verdien ved hjelp av formelen for det
 
 nps = ((100 - prosent_negative) - prosent_negative)
 print (f"Supportavdelingens NPS denne uke er: {nps:.1f} %")
