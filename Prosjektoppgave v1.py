@@ -117,7 +117,7 @@ for i in kl_slett:
     if re.match(r"0[89]:", i):
         kl_08_10 +=1
         
-print("Antall telefoner mellom 08-10: ", kl_08_10)
+# print("Antall telefoner mellom 08-10: ", kl_08_10)
 
 kl_10_12 = 0
 
@@ -125,7 +125,7 @@ for i in kl_slett:
     if re.match(r"1[01]:", i):
         kl_10_12 +=1
         
-print("Antall telefoner mellom 10-12: ", kl_10_12)
+# print("Antall telefoner mellom 10-12: ", kl_10_12)
 
 
 kl_12_14 = 0
@@ -134,7 +134,7 @@ for i in kl_slett:
     if re.match(r"1[23]:", i):
         kl_12_14 +=1
         
-print("Antall telefoner mellom 12-14: ", kl_12_14)
+# print("Antall telefoner mellom 12-14: ", kl_12_14)
 
 
 kl_14_16 = 0
@@ -143,8 +143,66 @@ for i in kl_slett:
     if re.match(r"1[45]:", i):
         kl_14_16 +=1
         
-print("Antall telefoner mellom 14-16: ", kl_14_16)
+# print("Antall telefoner mellom 14-16: ", kl_14_16)
 
 totalt_antall_samtaler = (kl_08_10 + kl_10_12 + kl_12_14 + kl_14_16)
-print ("Totalt antall samtaler denne uken er :", totalt_antall_samtaler)
+# print ("Totalt antall samtaler denne uken er :", totalt_antall_samtaler)
+
+
+# https://matplotlib.org/stable/gallery/pie_and_polar_charts/pie_features.html
+
+# Eg lager faste tags med tidspunktene og gir verdiene fra uthentinga over, legger til autopct='%1.0f%%' til slutt for å sette prosentdelen av samtalene for kvar 2-timers bolk
+
+labels = '08-10', '10-12', '12-14', '14-16'
+sizes = [kl_08_10, kl_10_12, kl_12_14, kl_14_16]
+
+fig, ax = plt.subplots()
+ax.pie(sizes, labels=labels, autopct='%1.0f%%')
+
+
+##################################################################################################################
+
+# Del f) Kundens tilfredshet loggføres som tall fra 1-10 hvor 1 indikerer svært misfornøyd og 10 indikerer svært fornøyd. Disse tilbakemeldingene skal så overføres til NPS-systemet (Net Promoter Score).
+# NPS-systemet er konstruert på følgende måte:
+# # Score 1-6 oppfattes som at kunden er negativ (vil trolig ikke anbefale MORSE til andre).
+# Score 7-8 oppfattes som et nøytralt svar.
+# Score 9-10 oppfattes som at kunden er positiv (vil trolig anbefale MORSE til andre).
+# Supportavdelingens NPS beregnes som et tall, prosentandelen positive kunder minus prosentandelen negative kunder. Ved en formel kan dette gis slik:
+# NPS = % positive kunder - % negative kunder
+
+# Lag et program som regner ut supportavdelings NPS og skriver svaret til skjerm. Merk: Kunder som ikke har gitt tilbakemelding på tilfredshet, skal utelates fra utregningene.
+
+# Finner først antallet tilbakemeldinger som er registrert ved å bruke en for-løkke for hele tabellen score, der vi teller opp antallet treff med verdi fra og med 1
+
+antall_tilbakemeldinger = 0
+for i in score:
+    if 1 <= i:
+        antall_tilbakemeldinger +=1
+
+# print (antall_tilbakemeldinger)
+
+negative_kunder = 0
+for i in score:
+    if 0 <= i <=6:
+        negative_kunder +=1
+
+# print (negative_kunder)
+
+
+positive_kunder = 0
+for i in score:
+    if 9 <= i:
+        positive_kunder +=1
+
+# print (positive_kunder)
+
+prosent_negative = (negative_kunder / antall_tilbakemeldinger) *100
+# print(f"Andel negative kunder er: {prosent_negative:.1f} %")
+
+
+nps = ((100 - prosent_negative) - prosent_negative)
+print (f"Supportavdelingens NPS denne uke er: {nps:.1f} %")
+
+
+
 
